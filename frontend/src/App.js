@@ -7,9 +7,11 @@ function App() {
   const [editingId, setEditingId] = useState(null);
   const [editingText, setEditingText] = useState('');
 
+  const BASE_URL = 'https://note-taking-appp.onrender.com';
+
   // Fetch notes on load
   useEffect(() => {
-    axios.get('http://localhost:5000/api/notes')
+    axios.get(`${BASE_URL}/api/notes`)
       .then(res => setNotes(res.data));
   }, []);
 
@@ -17,7 +19,7 @@ function App() {
   const addNote = () => {
     if (!note.trim()) return;
 
-    axios.post('http://localhost:5000/api/notes', { title: note })
+    axios.post(`${BASE_URL}/api/notes`, { title: note })
       .then(res => {
         setNotes([...notes, res.data]);
         setNote('');
@@ -26,7 +28,7 @@ function App() {
 
   // Delete a note
   const deleteNote = (id) => {
-    axios.delete(`http://localhost:5000/api/notes/${id}`)
+    axios.delete(`${BASE_URL}/api/notes/${id}`)
       .then(() => {
         setNotes(notes.filter(n => n.id !== id));
       });
@@ -42,7 +44,7 @@ function App() {
   const saveEdit = (id) => {
     if (!editingText.trim()) return;
 
-    axios.put(`http://localhost:5000/api/notes/${id}`, { title: editingText })
+    axios.put(`${BASE_URL}/api/notes/${id}`, { title: editingText })
       .then(res => {
         setNotes(notes.map(n => (n.id === id ? res.data : n)));
         setEditingId(null);
